@@ -18,20 +18,36 @@ public class DatabaseConnectivity {
     }
 
     private void createTables() {
-        try (Statement stmt = this.connection.createStatement()) {
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS patients (" +
-                    "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                    "name TEXT NOT NULL," +
-                    "surname TEXT NOT NULL," +
-                    "phone_number TEXT NOT NULL," +
-                    "date_created DATE)");
-            stmt.executeUpdate("CREATE TABLE IF NOT EXISTS visits (" +
-                    "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
-                    "patient_id INT NOT NULL," +
-                    "urgent BOOLEAN NOT NULL," +
-                    "room INT," +
-                    "doctor TEXT NOT NULL," +
-                    "FOREIGN KEY (patient_id) REFERENCES patients (id))");
+        String createPatients = "CREATE TABLE IF NOT EXISTS patients (" +
+                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                "name VARCHAR(50) NOT NULL," +
+                "surname VARCHAR(50) NOT NULL," +
+                "phone_number VARCHAR(15) NOT NULL," +
+                "date_created DATE NOT NULL)";
+        String createDoctors = "CREATE TABLE IF NOT EXISTS doctors (" +
+                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                "name VARCHAR(50) NOT NULL," +
+                "surname VARCHAR(50) NOT NULL," +
+                "specialization VARCHAR(200)," +
+                "phone_number VARCHAR(15) NOT NULL," +
+                "email VARCHAR(100)," +
+                "date_created DATE NOT NULL)";
+        String createVisits = "CREATE TABLE IF NOT EXISTS visits (" +
+                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                "patient_id INT NOT NULL," +
+                "description TEXT," +
+                "urgent TINYINT(1) NOT NULL," +
+                "room INT," +
+                "doctor VARCHAR(100) NOT NULL," +
+                "doctor_id INT NOT NULL," +
+                "FOREIGN KEY (patient_id) REFERENCES patients (id)," +
+                "FOREIGN KEY (doctor_id) REFERENCES doctors (id))";
+        try (PreparedStatement createPatientsStmt = this.connection.prepareStatement(createPatients);
+             PreparedStatement createDoctorsStmt = this.connection.prepareStatement(createDoctors);
+             PreparedStatement createVisitsStmt = this.connection.prepareStatement(createVisits)) {
+            createPatientsStmt.executeUpdate();
+            createDoctorsStmt.executeUpdate();
+            createVisitsStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("SQLException: " + e.getMessage());
         }
