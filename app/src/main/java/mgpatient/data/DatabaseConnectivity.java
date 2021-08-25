@@ -1,5 +1,6 @@
 package mgpatient.data;
 
+import mgpatient.domain.Doctor;
 import mgpatient.domain.Patient;
 
 import java.sql.*;
@@ -64,6 +65,25 @@ public class DatabaseConnectivity {
             return true;
         } catch (SQLException e) {
             System.out.println("Cannot add patient to database. " + e.getMessage());
+            return false;
+        }
+    }
+
+    public boolean insertDoctor(Doctor doctor) {
+        String insertQuery = "INSERT INTO doctors " +
+                "(name, surname, specialization, phone_number, email, date_created)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, doctor.getName());
+            preparedStatement.setString(2, doctor.getSurname());
+            preparedStatement.setString(3, doctor.getSpecialization());
+            preparedStatement.setString(4, doctor.getPhoneNumber());
+            preparedStatement.setString(5, doctor.getEmail());
+            preparedStatement.setDate(6, new Date(doctor.getDateCreated().getTime()));
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Cannot add doctor to database. " + e.getMessage());
             return false;
         }
     }
