@@ -26,6 +26,8 @@ public class MainUI {
                 addPatientUI();
             } else if (option == 2) {
                 addDoctorUI();
+            } else if (option == 3) {
+                createVisitUI();
             } else {
                 System.out.println("\nThere's no such option: " + option);
             }
@@ -69,5 +71,24 @@ public class MainUI {
             System.out.println("\nInvalid input!");
             System.out.println("Make sure that required fields (*) are not empty.");
         }
+    }
+
+    private void createVisitUI() {
+        System.out.println("\nFields with \"*\" are required");
+        System.out.print("\n*Patient name: ");
+        String pName = this.scanner.next();
+        System.out.print("*Patient surname: ");
+        String pSurname = this.scanner.next();
+        System.out.print("\n*Doctor name: ");
+        String dName = this.scanner.next();
+        System.out.print("*Doctor surname: ");
+        String dSurname = this.scanner.next();
+        System.out.print("Description: ");
+        String description = this.scanner.next();
+        System.out.print("Urgent (yes/no): ");
+        boolean urgent = this.scanner.next().equalsIgnoreCase("yes");
+        System.out.print("Room: ");
+        int room = this.scanner.nextInt();
+        this.MGPatient.createNewVisit(pName, pSurname, dName, dSurname, description, urgent, room);
     }
 }
