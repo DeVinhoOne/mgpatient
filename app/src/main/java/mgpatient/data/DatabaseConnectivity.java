@@ -2,6 +2,7 @@ package mgpatient.data;
 
 import mgpatient.domain.Doctor;
 import mgpatient.domain.Patient;
+import mgpatient.domain.Visit;
 
 import java.sql.*;
 
@@ -64,7 +65,7 @@ public class DatabaseConnectivity {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Cannot add patient to database. " + e.getMessage());
+            System.out.println("Cannot add PATIENT to database. " + e.getMessage());
             return false;
         }
     }
@@ -83,8 +84,58 @@ public class DatabaseConnectivity {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Cannot add doctor to database. " + e.getMessage());
+            System.out.println("Cannot add DOCTOR to database. " + e.getMessage());
             return false;
+        }
+    }
+
+    public boolean insertVisit(Visit visit) {
+        String insertQuery = "INSERT INTO visits " +
+                "(patient_id, description, urgent, room, doctor, doctor_id)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
+            preparedStatement.setInt(1, visit.getPatientId());
+            preparedStatement.setString(2, visit.getDescription());
+            preparedStatement.setBoolean(3, visit.isUrgent());
+            preparedStatement.setInt(4, visit.getRoom());
+            preparedStatement.setString(5, visit.getDoctor());
+            preparedStatement.setInt(6, visit.getDoctorId());
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("Cannot add VISIT to database. " + e.getMessage());
+            return false;
+        }
+    }
+
+    public Patient selectPatient(String name, String surname) {
+        String selectQuery = "SELECT * FROM patients WHERE name = ? AND surname = ?";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectQuery)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, surname);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return new Patient(resultSet.getString("name"), resultSet.getString("surname"),
+                    resultSet.getString("phone_number"), resultSet.getInt("id"));
+        } catch (SQLException e) {
+            System.out.println("Cannot find PATIENT in database. " + e.getMessage());
+            return null;
+        }
+    }
+
+    public Doctor selectDoctor(String name, String surname) {
+        String selectQuery = "SELECT * FROM doctors WHERE name = ? AND surname = ?";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectQuery)) {
+            preparedStatement.setString(1, name);
+            preparedStatement.setString(2, surname);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return new Doctor(resultSet.getString("name"), resultSet.getString("surname"),
+                    resultSet.getString("phone_number"), resultSet.getString("specialization"),
+                    resultSet.getString("email"), resultSet.getInt("id"));
+        } catch (SQLException e) {
+            System.out.println("Cannot find DOCTOR in database. " + e.getMessage());
+            return null;
         }
     }
 }
