@@ -1,7 +1,6 @@
 package mgpatient.ui;
 
 import mgpatient.logic.MGPatient;
-import mgpatient.util.Validator;
 
 import java.util.Scanner;
 
@@ -42,9 +41,7 @@ public class MainUI {
         String surname = this.scanner.next();
         System.out.print("*Phone number: ");
         String phoneNumber = this.scanner.next();
-        //Validate input
-        if (Validator.validateStringNotNullInput(new String[] {name, surname, phoneNumber})) {
-            this.MGPatient.createPatient(name, surname, phoneNumber);
+        if (this.MGPatient.createPatient(name, surname, phoneNumber)) {
             System.out.println("\nNew patient has been added!");
         } else {
             System.out.println("\nInvalid input!");
@@ -64,8 +61,7 @@ public class MainUI {
         String specialization = this.scanner.next();
         System.out.print("E-mail: ");
         String email = this.scanner.next();
-        if (Validator.validateStringNotNullInput(new String[] {name, surname, phoneNumber})) {
-            this.MGPatient.createDoctor(name, surname, phoneNumber, specialization,email);
+        if (this.MGPatient.createDoctor(name, surname, phoneNumber, specialization,email)) {
             System.out.println("\nNew doctor has been added.");
         } else {
             System.out.println("\nInvalid input!");

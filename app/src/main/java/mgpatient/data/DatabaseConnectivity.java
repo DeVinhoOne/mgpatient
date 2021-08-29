@@ -15,7 +15,7 @@ public class DatabaseConnectivity {
             this.connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/mgpatient", "root", "admin");
             this.createTables();
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("\nSQLException: " + e.getMessage());
         }
     }
 
@@ -51,7 +51,7 @@ public class DatabaseConnectivity {
             createDoctorsStmt.executeUpdate();
             createVisitsStmt.executeUpdate();
         } catch (SQLException e) {
-            System.out.println("SQLException: " + e.getMessage());
+            System.out.println("\nSQLException: " + e.getMessage());
         }
     }
 
@@ -65,7 +65,7 @@ public class DatabaseConnectivity {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Cannot add PATIENT to database. " + e.getMessage());
+            System.out.println("\nCannot add PATIENT to database. " + e.getMessage());
             return false;
         }
     }
@@ -84,7 +84,7 @@ public class DatabaseConnectivity {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Cannot add DOCTOR to database. " + e.getMessage());
+            System.out.println("\nCannot add DOCTOR to database. " + e.getMessage());
             return false;
         }
     }
@@ -103,7 +103,7 @@ public class DatabaseConnectivity {
             preparedStatement.executeUpdate();
             return true;
         } catch (SQLException e) {
-            System.out.println("Cannot add VISIT to database. " + e.getMessage());
+            System.out.println("\nCannot add VISIT to database. " + e.getMessage());
             return false;
         }
     }
@@ -118,7 +118,7 @@ public class DatabaseConnectivity {
             return new Patient(resultSet.getString("name"), resultSet.getString("surname"),
                     resultSet.getString("phone_number"), resultSet.getInt("id"));
         } catch (SQLException e) {
-            System.out.println("Cannot find PATIENT in database. " + e.getMessage());
+            System.out.println("\nCannot find PATIENT in database. " + e.getMessage());
             return null;
         }
     }
@@ -134,7 +134,7 @@ public class DatabaseConnectivity {
                     resultSet.getString("phone_number"), resultSet.getString("specialization"),
                     resultSet.getString("email"), resultSet.getInt("id"));
         } catch (SQLException e) {
-            System.out.println("Cannot find DOCTOR in database. " + e.getMessage());
+            System.out.println("\nCannot find DOCTOR in database. " + e.getMessage());
             return null;
         }
     }
