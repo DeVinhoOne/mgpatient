@@ -57,9 +57,9 @@ public class MainUI {
         String surname = this.scanner.next();
         System.out.print("*Phone number: ");
         String phoneNumber = this.scanner.next();
-        System.out.print("Specialization: ");
+        System.out.print("*Specialization: ");
         String specialization = this.scanner.next();
-        System.out.print("E-mail: ");
+        System.out.print("*E-mail: ");
         String email = this.scanner.next();
         if (this.MGPatient.createDoctor(name, surname, phoneNumber, specialization,email)) {
             System.out.println("\nNew doctor has been added.");

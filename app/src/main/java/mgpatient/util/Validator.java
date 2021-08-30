@@ -15,7 +15,7 @@ public class Validator {
 
     public static boolean valCreateDoctor(Doctor doctor) {
         // Validate not null input
-        if (!validateNotNullInput(new String[] {doctor.getName(), doctor.getSurname(), doctor.getPhoneNumber()})) {
+        if (!validateNotNullInput(new String[] {doctor.getName(), doctor.getSurname(), doctor.getPhoneNumber(), doctor.getSpecialization(), doctor.getEmail()})) {
             return false;
         }
         return true;
