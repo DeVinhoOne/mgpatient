@@ -58,8 +58,8 @@ public class DatabaseConnectivity {
     public boolean insertPatient(Patient patient) {
         String insertQuery = "INSERT INTO patients (name, surname, phone_number, date_created) VALUES (?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
-            preparedStatement.setString(1, patient.getName());
-            preparedStatement.setString(2, patient.getSurname());
+            preparedStatement.setString(1, patient.getName().toLowerCase());
+            preparedStatement.setString(2, patient.getSurname().toLowerCase());
             preparedStatement.setString(3, patient.getPhoneNumber());
             preparedStatement.setDate(4, new Date(patient.getDateCreated().getTime()));
             preparedStatement.executeUpdate();
@@ -75,11 +75,11 @@ public class DatabaseConnectivity {
                 "(name, surname, specialization, phone_number, email, date_created)" +
                 " VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
-            preparedStatement.setString(1, doctor.getName());
-            preparedStatement.setString(2, doctor.getSurname());
-            preparedStatement.setString(3, doctor.getSpecialization());
+            preparedStatement.setString(1, doctor.getName().toLowerCase());
+            preparedStatement.setString(2, doctor.getSurname().toLowerCase());
+            preparedStatement.setString(3, doctor.getSpecialization().toLowerCase());
             preparedStatement.setString(4, doctor.getPhoneNumber());
-            preparedStatement.setString(5, doctor.getEmail());
+            preparedStatement.setString(5, doctor.getEmail().toLowerCase());
             preparedStatement.setDate(6, new Date(doctor.getDateCreated().getTime()));
             preparedStatement.executeUpdate();
             return true;
@@ -95,10 +95,10 @@ public class DatabaseConnectivity {
                 " VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
             preparedStatement.setInt(1, visit.getPatientId());
-            preparedStatement.setString(2, visit.getDescription());
+            preparedStatement.setString(2, visit.getDescription().toLowerCase());
             preparedStatement.setBoolean(3, visit.isUrgent());
             preparedStatement.setInt(4, visit.getRoom());
-            preparedStatement.setString(5, visit.getDoctor());
+            preparedStatement.setString(5, visit.getDoctor().toLowerCase());
             preparedStatement.setInt(6, visit.getDoctorId());
             preparedStatement.executeUpdate();
             return true;
@@ -111,8 +111,8 @@ public class DatabaseConnectivity {
     public Patient selectPatient(String name, String surname) {
         String selectQuery = "SELECT * FROM patients WHERE name = ? AND surname = ?";
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectQuery)) {
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, surname);
+            preparedStatement.setString(1, name.toLowerCase());
+            preparedStatement.setString(2, surname.toLowerCase());
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return new Patient(resultSet.getString("name"), resultSet.getString("surname"),
@@ -126,8 +126,8 @@ public class DatabaseConnectivity {
     public Doctor selectDoctor(String name, String surname) {
         String selectQuery = "SELECT * FROM doctors WHERE name = ? AND surname = ?";
         try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectQuery)) {
-            preparedStatement.setString(1, name);
-            preparedStatement.setString(2, surname);
+            preparedStatement.setString(1, name.toLowerCase());
+            preparedStatement.setString(2, surname.toLowerCase());
             ResultSet resultSet = preparedStatement.executeQuery();
             resultSet.next();
             return new Doctor(resultSet.getString("name"), resultSet.getString("surname"),
