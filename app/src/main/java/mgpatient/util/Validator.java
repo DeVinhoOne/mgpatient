@@ -14,6 +14,10 @@ public class Validator {
             System.out.println("\nInvalid phone number: " + patient.getPhoneNumber());
             return false;
         }
+        if (!validateName(patient.getName()) || !validateName(patient.getSurname())) {
+            System.out.println("\nInvalid name/surname: " + patient.getName() + " " + patient.getSurname());
+            return false;
+        }
         return true;
     }
 
@@ -26,12 +30,28 @@ public class Validator {
             System.out.println("\nInvalid phone number." + doctor.getPhoneNumber());
             return false;
         }
+        if (!validateName(doctor.getName()) || !validateName(doctor.getSurname())) {
+            System.out.println("\nInvalid name/surname: " + doctor.getName() + " " + doctor.getSurname());
+            return false;
+        }
         return true;
     }
 
     private static boolean validateNotNullInput(String[] args) {
         for (String arg : args) {
             if (arg == null || arg.isBlank() || arg.equalsIgnoreCase("null")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean validateName(String name) {
+        if (name.length() < 2 || name.contains(" ")) {
+            return false;
+        }
+        for (char el : name.toCharArray()) {
+            if (!Character.isAlphabetic(el)) {
                 return false;
             }
         }
