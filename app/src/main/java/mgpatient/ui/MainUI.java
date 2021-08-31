@@ -39,7 +39,7 @@ public class MainUI {
         String name = this.scanner.next();
         System.out.print("*Surname: ");
         String surname = this.scanner.next();
-        System.out.print("*Phone number: ");
+        System.out.print("*Phone number (with country code, no spaces): ");
         String phoneNumber = this.scanner.next();
         if (this.MGPatient.createPatient(name, surname, phoneNumber)) {
             System.out.println("\nNew patient has been added!");
@@ -54,7 +54,7 @@ public class MainUI {
         String name = this.scanner.next();
         System.out.print("*Surname: ");
         String surname = this.scanner.next();
-        System.out.print("*Phone number: ");
+        System.out.print("*Phone number (with country code, no spaces): ");
         String phoneNumber = this.scanner.next();
         System.out.print("*Specialization: ");
         String specialization = this.scanner.next();
