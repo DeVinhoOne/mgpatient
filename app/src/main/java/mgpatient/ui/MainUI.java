@@ -44,8 +44,7 @@ public class MainUI {
         if (this.MGPatient.createPatient(name, surname, phoneNumber)) {
             System.out.println("\nNew patient has been added!");
         } else {
-            System.out.println("\nInvalid input!");
-            System.out.println("None of the fields cannot be empty.");
+            System.out.println("Make sure that required fields (*) are not empty.");
         }
     }
 
@@ -61,10 +60,9 @@ public class MainUI {
         String specialization = this.scanner.next();
         System.out.print("*E-mail: ");
         String email = this.scanner.next();
-        if (this.MGPatient.createDoctor(name, surname, phoneNumber, specialization,email)) {
+        if (this.MGPatient.createDoctor(name, surname, phoneNumber, specialization, email)) {
             System.out.println("\nNew doctor has been added.");
         } else {
-            System.out.println("\nInvalid input!");
             System.out.println("Make sure that required fields (*) are not empty.");
         }
     }

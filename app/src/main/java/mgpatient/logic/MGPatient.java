@@ -12,7 +12,6 @@ public class MGPatient {
 
     public boolean createPatient(String name, String surname, String phoneNumber) {
         Patient patient = new Patient(name, surname, phoneNumber);
-        // Validate patient here!
         if (!Validator.valCreatePatient(patient)) {
             return false;
         }

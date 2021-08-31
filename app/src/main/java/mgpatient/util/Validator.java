@@ -10,6 +10,10 @@ public class Validator {
         if (!validateNotNullInput(new String[] {patient.getName(), patient.getSurname(), patient.getPhoneNumber()})) {
             return false;
         }
+        if (!validatePhoneNumber(patient.getPhoneNumber())) {
+            System.out.println("\nInvalid phone number: " + patient.getPhoneNumber());
+            return false;
+        }
         return true;
     }
 
@@ -18,12 +22,33 @@ public class Validator {
         if (!validateNotNullInput(new String[] {doctor.getName(), doctor.getSurname(), doctor.getPhoneNumber(), doctor.getSpecialization(), doctor.getEmail()})) {
             return false;
         }
+        if (!validatePhoneNumber(doctor.getPhoneNumber())) {
+            System.out.println("\nInvalid phone number." + doctor.getPhoneNumber());
+            return false;
+        }
         return true;
     }
 
     private static boolean validateNotNullInput(String[] args) {
         for (String arg : args) {
             if (arg == null || arg.isBlank() || arg.equalsIgnoreCase("null")) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean validatePhoneNumber(String phoneNumber) {
+        //accepted format: +48123456789
+        if (phoneNumber.length() != 12 ||
+            phoneNumber.charAt(0) != '+' ||
+            phoneNumber.contains(" ")) {
+            return false;
+        }
+        //false if char is not a digit or plus if first
+        for (int i = 1; i < phoneNumber.length(); i++) {
+            char digit = phoneNumber.charAt(i);
+            if (!Character.isDigit(digit)) {
                 return false;
             }
         }
