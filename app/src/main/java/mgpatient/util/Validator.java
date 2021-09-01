@@ -47,31 +47,15 @@ public class Validator {
     }
 
     private static boolean validateName(String name) {
-        if (name.length() < 2 || name.contains(" ")) {
+        //accepted format: David david Thomas thomas
+        if (name.length() < 2) {
             return false;
         }
-        for (char el : name.toCharArray()) {
-            if (!Character.isAlphabetic(el)) {
-                return false;
-            }
-        }
-        return true;
+        return name.matches("[A-Z]?[a-z]+");
     }
 
     private static boolean validatePhoneNumber(String phoneNumber) {
         //accepted format: +48123456789
-        if (phoneNumber.length() != 12 ||
-            phoneNumber.charAt(0) != '+' ||
-            phoneNumber.contains(" ")) {
-            return false;
-        }
-        //false if char is not a digit or plus if first
-        for (int i = 1; i < phoneNumber.length(); i++) {
-            char digit = phoneNumber.charAt(i);
-            if (!Character.isDigit(digit)) {
-                return false;
-            }
-        }
-        return true;
+        return phoneNumber.matches("\\+\\d{11}");
     }
 }
