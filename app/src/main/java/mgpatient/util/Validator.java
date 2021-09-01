@@ -2,6 +2,7 @@ package mgpatient.util;
 
 import mgpatient.domain.Doctor;
 import mgpatient.domain.Patient;
+import org.apache.commons.validator.routines.EmailValidator;
 
 public class Validator {
 
@@ -34,6 +35,14 @@ public class Validator {
             System.out.println("\nInvalid name/surname: " + doctor.getName() + " " + doctor.getSurname());
             return false;
         }
+        if (!validateSpecialization(doctor.getSpecialization())) {
+            System.out.println("\nInvalid specialization: " + doctor.getSpecialization());
+            return false;
+        }
+        if (!validateEmail(doctor.getEmail())){
+            System.out.println("\nInvalid e-mail address: " + doctor.getEmail());
+            return false;
+        }
         return true;
     }
 
@@ -57,5 +66,17 @@ public class Validator {
     private static boolean validatePhoneNumber(String phoneNumber) {
         //accepted format: +48123456789
         return phoneNumber.matches("\\+\\d{11}");
+    }
+
+    private static boolean validateSpecialization(String specialization) {
+        //accepted format: Dentist dentist
+        if (specialization.length() < 2) {
+            return false;
+        }
+        return specialization.matches("[A-Z]?[a-z]+");
+    }
+
+    private static boolean validateEmail(String email) {
+        return EmailValidator.getInstance().isValid(email);
     }
 }
