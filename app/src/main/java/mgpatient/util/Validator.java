@@ -2,6 +2,7 @@ package mgpatient.util;
 
 import mgpatient.domain.Doctor;
 import mgpatient.domain.Patient;
+import mgpatient.domain.User;
 import org.apache.commons.validator.routines.EmailValidator;
 
 public class Validator {
@@ -46,6 +47,29 @@ public class Validator {
         return true;
     }
 
+    public static boolean valCreateUser(User user) {
+        if (!validateNotNullInput(new String[] {user.getName(), user.getSurname(), user.getPhoneNumber(), user.getEmail(), user.getPassword()})) {
+            return false;
+        }
+        if (!validatePhoneNumber(user.getPhoneNumber())) {
+            System.out.println("\nInvalid phone number." + user.getPhoneNumber());
+            return false;
+        }
+        if (!validateName(user.getName()) || !validateName(user.getSurname())) {
+            System.out.println("\nInvalid name/surname: " + user.getName() + " " + user.getSurname());
+            return false;
+        }
+        if (!validateEmail(user.getEmail())){
+            System.out.println("\nInvalid e-mail address: " + user.getEmail());
+            return false;
+        }
+        if (!validatePassword(user.getPassword())) {
+            System.out.println("\nInvalid password: " + user.getPassword());
+            return false;
+        }
+        return true;
+    }
+
     private static boolean validateNotNullInput(String[] args) {
         for (String arg : args) {
             if (arg == null || arg.isBlank() || arg.equalsIgnoreCase("null")) {
@@ -78,5 +102,9 @@ public class Validator {
 
     private static boolean validateEmail(String email) {
         return EmailValidator.getInstance().isValid(email);
+    }
+
+    private static boolean validatePassword(String password) {
+        return password.length() >= 9 && password.length() <= 20;
     }
 }

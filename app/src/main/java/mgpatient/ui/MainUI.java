@@ -1,20 +1,21 @@
 package mgpatient.ui;
 
-import mgpatient.logic.MGPatient;
+import mgpatient.domain.User;
+import mgpatient.logic.MGPatientAuth;
 
 import java.util.Scanner;
 
 public class MainUI {
 
     private final Scanner scanner = new Scanner(System.in);
-    private final MGPatient MGPatient = new MGPatient();
+    private final MGPatientAuth MGPatientAuth = new MGPatientAuth();
+    private User signedInUser;
 
     public void start() {
-        System.out.println("\nMGPatient - Add patients and visits to database");
+        System.out.println("\nMGPatient - Authentication");
         while (true) {
-            System.out.println("\n1. Add new patient");
-            System.out.println("2. Add new doctor");
-            System.out.println("3. Create new visit");
+            System.out.println("\n1. Sign in");
+            System.out.println("2. Create new user");
             System.out.println("0. Exit program");
             System.out.print(">");
             int option = this.scanner.nextInt();
@@ -22,33 +23,35 @@ public class MainUI {
                 System.out.println("\nExiting MGPatient..");
                 return;
             } else if (option == 1) {
-                addPatientUI();
+                signInUI();
+                if (this.signedInUser != null) {
+                    break;
+                }
             } else if (option == 2) {
-                addDoctorUI();
-            } else if (option == 3) {
-                createVisitUI();
+                createUserUI();
             } else {
                 System.out.println("\nThere's no such option: " + option);
             }
         }
+        new LoggedInUI(this.signedInUser).loggedInUI();
     }
 
-    private void addPatientUI() {
+    private void signInUI() {
         System.out.println("\nFields with \"*\" are required");
-        System.out.print("\n*Name: ");
-        String name = this.scanner.next();
-        System.out.print("*Surname: ");
-        String surname = this.scanner.next();
-        System.out.print("*Phone number (with country code, no spaces): ");
-        String phoneNumber = this.scanner.next();
-        if (this.MGPatient.createPatient(name, surname, phoneNumber)) {
-            System.out.println("\nNew patient has been added!");
+        System.out.print("\n*E-mail: ");
+        String email = this.scanner.next();
+        System.out.print("*Password: ");
+        String password = this.scanner.next();
+        this.signedInUser = this.MGPatientAuth.signIn(email, password);
+        if (this.signedInUser != null) {
+            System.out.println("\nSuccessfully signed in.");
+            return;
         } else {
             System.out.println("Make sure that required fields (*) are not empty.");
         }
     }
 
-    private void addDoctorUI() {
+    private void createUserUI() {
         System.out.println("\nFields with \"*\" are required");
         System.out.print("\n*Name: ");
         String name = this.scanner.next();
@@ -56,33 +59,14 @@ public class MainUI {
         String surname = this.scanner.next();
         System.out.print("*Phone number (with country code, no spaces): ");
         String phoneNumber = this.scanner.next();
-        System.out.print("*Specialization: ");
-        String specialization = this.scanner.next();
         System.out.print("*E-mail: ");
         String email = this.scanner.next();
-        if (this.MGPatient.createDoctor(name, surname, phoneNumber, specialization, email)) {
-            System.out.println("\nNew doctor has been added.");
+        System.out.print("*Password: ");
+        String password = this.scanner.next();
+        if (this.MGPatientAuth.createUser(name, surname, phoneNumber, email, password)) {
+            System.out.println("\nNew user has been created. Now you can sign in.");
         } else {
             System.out.println("Make sure that required fields (*) are not empty.");
         }
-    }
-
-    private void createVisitUI() {
-        System.out.println("\nFields with \"*\" are required");
-        System.out.print("\n*Patient name: ");
-        String pName = this.scanner.next();
-        System.out.print("*Patient surname: ");
-        String pSurname = this.scanner.next();
-        System.out.print("\n*Doctor name: ");
-        String dName = this.scanner.next();
-        System.out.print("*Doctor surname: ");
-        String dSurname = this.scanner.next();
-        System.out.print("Description: ");
-        String description = this.scanner.next();
-        System.out.print("Urgent (yes/no): ");
-        boolean urgent = this.scanner.next().equalsIgnoreCase("yes");
-        System.out.print("Room: ");
-        int room = this.scanner.nextInt();
-        this.MGPatient.createNewVisit(pName, pSurname, dName, dSurname, description, urgent, room);
     }
 }

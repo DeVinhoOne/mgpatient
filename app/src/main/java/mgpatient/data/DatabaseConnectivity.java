@@ -2,6 +2,7 @@ package mgpatient.data;
 
 import mgpatient.domain.Doctor;
 import mgpatient.domain.Patient;
+import mgpatient.domain.User;
 import mgpatient.domain.Visit;
 
 import java.sql.*;
@@ -44,12 +45,22 @@ public class DatabaseConnectivity {
                 "doctor_id INT NOT NULL," +
                 "FOREIGN KEY (patient_id) REFERENCES patients (id)," +
                 "FOREIGN KEY (doctor_id) REFERENCES doctors (id))";
+        String createUsers = "CREATE TABLE IF NOT EXISTS users (" +
+                "id INT NOT NULL AUTO_INCREMENT PRIMARY KEY," +
+                "name VARCHAR(50) NOT NULL," +
+                "surname VARCHAR(50) NOT NULL," +
+                "phone_number VARCHAR(15) NOT NULL," +
+                "email VARCHAR(100) NOT NULL," +
+                "password VARCHAR(20) NOT NULL," +
+                "date_created DATE NOT NULL)";
         try (PreparedStatement createPatientsStmt = this.connection.prepareStatement(createPatients);
              PreparedStatement createDoctorsStmt = this.connection.prepareStatement(createDoctors);
-             PreparedStatement createVisitsStmt = this.connection.prepareStatement(createVisits)) {
+             PreparedStatement createVisitsStmt = this.connection.prepareStatement(createVisits);
+             PreparedStatement createUsersStmt = this.connection.prepareStatement(createUsers)) {
             createPatientsStmt.executeUpdate();
             createDoctorsStmt.executeUpdate();
             createVisitsStmt.executeUpdate();
+            createUsersStmt.executeUpdate();
         } catch (SQLException e) {
             System.out.println("\nSQLException: " + e.getMessage());
         }
@@ -89,6 +100,25 @@ public class DatabaseConnectivity {
         }
     }
 
+    public boolean insertUser(User user) {
+        String insertQuery = "INSERT INTO users " +
+                "(name, surname, phone_number, email, password, date_created)" +
+                " VALUES (?, ?, ?, ?, ?, ?)";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(insertQuery)) {
+            preparedStatement.setString(1, user.getName().toLowerCase());
+            preparedStatement.setString(2, user.getSurname().toLowerCase());
+            preparedStatement.setString(3, user.getPhoneNumber());
+            preparedStatement.setString(4, user.getEmail());
+            preparedStatement.setString(5, user.getPassword());
+            preparedStatement.setDate(6, new Date(user.getDateCreated().getTime()));
+            preparedStatement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            System.out.println("\nCannot add USER to database. " + e.getMessage());
+            return false;
+        }
+    }
+
     public boolean insertVisit(Visit visit) {
         String insertQuery = "INSERT INTO visits " +
                 "(patient_id, description, urgent, room, doctor, doctor_id)" +
@@ -118,7 +148,7 @@ public class DatabaseConnectivity {
             return new Patient(resultSet.getString("name"), resultSet.getString("surname"),
                     resultSet.getString("phone_number"), resultSet.getInt("id"));
         } catch (SQLException e) {
-            System.out.println("\nCannot find PATIENT in database. " + e.getMessage());
+            System.out.println("\nCannot find PATIENT in the database. " + e.getMessage());
             return null;
         }
     }
@@ -134,7 +164,22 @@ public class DatabaseConnectivity {
                     resultSet.getString("phone_number"), resultSet.getString("specialization"),
                     resultSet.getString("email"), resultSet.getInt("id"));
         } catch (SQLException e) {
-            System.out.println("\nCannot find DOCTOR in database. " + e.getMessage());
+            System.out.println("\nCannot find DOCTOR in the database. " + e.getMessage());
+            return null;
+        }
+    }
+
+    public User selectUser(String email, String password) {
+        String selectQuery = "SELECT * FROM users WHERE email = ? AND password = ?";
+        try (PreparedStatement preparedStatement = this.connection.prepareStatement(selectQuery)) {
+            preparedStatement.setString(1, email.toLowerCase());
+            preparedStatement.setString(2, password);
+            ResultSet resultSet = preparedStatement.executeQuery();
+            resultSet.next();
+            return new User(resultSet.getString("name"), resultSet.getString("surname"), resultSet.getString("phone_number"),
+                            resultSet.getString("email"), resultSet.getString("password"));
+        } catch (SQLException e) {
+            System.out.println("\nCannot find USER in the database. " + e.getMessage());
             return null;
         }
     }
